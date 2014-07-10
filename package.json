@@ -1,0 +1,26 @@
+{
+  "name": "coffee-bird",
+  "version": "0.1.0",
+  "description": "A bird game.",
+  "main": "src/main.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mfellner/coffee-bird.git"
+  },
+  "author": "Maximilian Fellner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mfellner/coffee-bird/issues"
+  },
+  "homepage": "https://github.com/mfellner/coffee-bird",
+  "devDependencies": {
+    "coffee-script": "^1.7.1",
+    "grunt": "^0.4.5",
+    "grunt-coffeelint": "0.0.10",
+    "grunt-contrib-coffee": "^0.10.1",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}
