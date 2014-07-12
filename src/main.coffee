@@ -1,2 +1,7 @@
+# Main
 
-print "Hello, World!"
+Game = require './game'
+
+game = new Game('bird-game')
+
+game.log()

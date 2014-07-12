@@ -1,0 +1,3 @@
+[submodule "lib/instant-rocket-fuel"]
+	path = lib/instant-rocket-fuel
+	url = https://github.com/kolja/Instant-Rocket-Fuel.git

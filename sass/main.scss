@@ -1,0 +1,16 @@
+// main.scss
+
+@import 'bourbon/bourbon';
+@import "neat/neat";
+
+html, body {
+  font-family: $lucida-grande;
+}
+
+div.container {
+  @include outer-container;
+}
+
+div.element {
+  @include span-columns(6);
+}
