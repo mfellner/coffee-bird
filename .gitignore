@@ -1,0 +1,7 @@
+.ruby-gemset
+.ruby-version
+Gemfile.lock
+lib/
+node_modules/
+use-node.sh
+.DS_Store
