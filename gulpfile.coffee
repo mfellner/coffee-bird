@@ -18,11 +18,13 @@ isRelease = gutil.env.type is 'release'
 sources =
   sass:   'sass/**/*.scss'
   html:   'index.html'
+  img:    'img/**/*.png'
   coffee: 'src/**/*.coffee'
 
 destinations =
   css:  'dist/css'
   html: 'dist/'
+  img:  'dist/img'
   js:   'dist/js'
 
 # TASKS ------------------------------------------------------------------------
@@ -46,6 +48,10 @@ gulp.task 'html', ->
   gulp.src(sources.html)
   .pipe(gulp.dest(destinations.html))
 
+gulp.task 'img', ->
+  gulp.src(sources.img)
+  .pipe(gulp.dest(destinations.img))
+
 gulp.task 'lint', ->
   gulp.src(sources.coffee)
   .pipe(coffeelint())
@@ -54,9 +60,9 @@ gulp.task 'lint', ->
 gulp.task 'src', ->
   gulp.src(sources.coffee, read: false)
   .pipe(browserify
-    transform:  ['coffeeify'],
-    extensions: ['.coffee'],
-    insertGlobals: true,
+    transform:  ['coffeeify']
+    extensions: ['.coffee']
+    insertGlobals: true
     debug: not isRelease)
   .pipe(rename('app.min.js'))
   .pipe(gulp.dest(destinations.js))
@@ -65,12 +71,13 @@ gulp.task 'watch', ->
   gulp.watch sources.sass,   ['style']
   gulp.watch sources.coffee, ['lint', 'src', 'html']
   gulp.watch sources.html,   ['html']
+  gulp.watch sources.img,   ['img']
 
 gulp.task 'clean', ->
   gulp.src(['dist/'], read: false).pipe(rimraf())
 
 gulp.task 'build', ->
-  runSequence 'clean', ['style', 'lint', 'src', 'html']
+  runSequence 'clean', ['style', 'lint', 'src', 'html', 'img']
 
 gulp.task 'build:watch', ['build', 'browser-sync', 'watch']
 

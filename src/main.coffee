@@ -1,7 +1,14 @@
 # Main
 
-Game = require './game'
+Game   = require './game'
+jQuery = require '../node_modules/jquery/dist/jquery.js'
 
-game = new Game('bird-game')
+Game.addScene require './background-scene'
 
-game.log()
+jQuery ->
+  game = new Game
+    "width" : 576
+    "height": 512
+
+  game.eventManager.on "map.finishedLoading", ->
+    game.start()
