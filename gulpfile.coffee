@@ -71,7 +71,7 @@ gulp.task 'watch', ->
   gulp.watch sources.sass,   ['style']
   gulp.watch sources.coffee, ['lint', 'src', 'html']
   gulp.watch sources.html,   ['html']
-  gulp.watch sources.img,   ['img']
+  gulp.watch sources.img,    ['img']
 
 gulp.task 'clean', ->
   gulp.src(['dist/'], read: false).pipe(rimraf())

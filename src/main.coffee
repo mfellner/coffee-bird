@@ -7,8 +7,8 @@ Game.addScene require './background-scene'
 
 jQuery ->
   game = new Game
-    "width" : 576
+    "width" : 288
     "height": 512
 
-  game.eventManager.on "map.finishedLoading", ->
-    game.start()
+  # game.eventManager.on "map.finishedLoading", ->
+  game.start()
