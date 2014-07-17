@@ -1,27 +1,28 @@
 # Background
 
-{ Sprite, Vector } = require '../lib/instant-rocket-fuel/src/irf'
+{ Sprite, Vector, BoundingBox } = require '../lib/instant-rocket-fuel/src/irf'
 
 class BackgroundSprite
 
-  constructor: ->
-    @width  = 576
-    @height = 512
-    @mode   = 'day'
+  constructor: (@eventManager, @keyboard) ->
+    @debug = false
+    @size  = new Vector(576, 512)
+    @mode  = 'day'
 
     @sprite = new Sprite
       'texture': 'img/background.png'
-      'width'  : @width
-      'height' : @height
+      'width'  : @size.x
+      'height' : @size.y
       'key'    :
         'day'  : 0
         'night': 1
 
-    @coords = new Vector(@width // 2, @height // 2)
-    @speed  = new Vector(-0.05, 0.0)
+    @coords = @size.div 2
+    @speed  = new Vector(-0.005, 0.0)
+    @hitbox = new BoundingBox(@coords, @size)
 
   update: (delta) ->
-    if @coords.x <= 0 then @coords.x = @width // 2
+    if @coords.x <= 0 then @coords.x = @size.x // 2
     @coords.add_(@speed.mult delta)
 
   render: (ctx) ->
@@ -29,5 +30,6 @@ class BackgroundSprite
     ctx.translate(@coords.x, @coords.y)
     @sprite.render(@mode, ctx)
     ctx.restore()
+    @hitbox.render(ctx) unless @debug is false
 
 module.exports = BackgroundSprite
