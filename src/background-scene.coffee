@@ -29,16 +29,15 @@ class BackgroundScene extends Scene
     return Math.floor Math.random() * (max - min) + min
 
   addRandomPillar: (i=0) ->
-    y = @randInt(300, 500)
-    rndX = @randInt(54*i, 54*i*3)
-    console.log('rndX', rndX)
-    x = (288 + (54 // 2)) + rndX
+    location = if @randInt(0, 2) then 'top' else 'btm'
+    y = if location is 'top' then @randInt(-100, 50) else @randInt(300, 500)
+    x = (288 + (54 // 2)) + @randInt(54*i, 54*i*3)
     coords = new Vector(x, y)
 
     pillar = new PillarSprite(@parent.eventManager,
                               @parent.keyboard,
                               coords,
-                              'btm')
+                              location)
     @pillarArray.push pillar
 
   update: (delta) ->
