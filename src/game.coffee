@@ -16,11 +16,9 @@ class Game extends Game
 
     # HACK TODO: refactor, move into own module
     onTouchStart = () =>
-      console.log('touch start')
       @keyboard.keyarray['up'] = true
 
     onTouchStop = () =>
-      console.log('touch stop')
       @keyboard.keyarray['up'] = false
 
     cvs = document.getElementsByTagName('canvas')[0]

@@ -5,7 +5,7 @@
 class BirdSprite
 
   constructor: (@eventManager, @keyboard) ->
-    @debug = true
+    @debug = false
     @type  = 'bird'
     @size  = new Vector(34, 26)
     @mode  = 'red'
@@ -38,22 +38,31 @@ class BirdSprite
       'fps'   : 8
       'frames': [6, 7, 8]
 
-    @maxSpeed  = 0.40
-    @gravity   = 0.04
-    @accelrtn  = 0.20
-    @rotation  = 0.00
-    @coords    = new Vector(100, 200)
-    @speed     = new Vector(0.0, 0.0)
-    @hitbox    = new BoundingBox(@coords, @size)
+    @maxSpeed    = 0.40
+    @gravity     = 0.04
+    @accelrtn    = 0.20
+    @rotation    = 0.00
+    @keepFalling = true
+    @coords      = new Vector(100, 200)
+    @speed       = new Vector(0.0, 0.0)
+    @hitbox      = new BoundingBox(@coords, @size)
+
+    @eventManager.register('bird:hitpillar', (pillar) =>
+      @onHit(pillar.hitbox, 'pillar:' + pillar.mode))
 
   onHit: (hitbox, type) ->
     @speed.set(0, 0)
-    if type == 'foreground'
-      @keepFalling = false
-      @coords.y = hitbox.topsideY() - @size.y // 2
-      @eventManager.trigger('bird:hitground', this)
-    else if type == 'background'
-      @coords.y = hitbox.downsideY() + @size.y // 2
+
+    switch type
+      when 'foreground'
+        @keepFalling = false
+        @coords.y = hitbox.topsideY() - @size.y // 2
+        @eventManager.trigger('bird:hitground', this)
+      when 'background'
+        @coords.y = hitbox.downsideY() + @size.y // 2
+      else
+        @keepFalling = false
+        @eventManager.trigger('bird:hitground', this)
 
   # HACK TODO: refactor
   rotate: (delta) ->
@@ -66,13 +75,13 @@ class BirdSprite
   update: (delta) ->
     if (@keyboard.key('up') && (@speed.y >= -@maxSpeed))
       if not @keepFalling
-        @keepFalling = false
+        @keepFalling = true
         @eventManager.trigger('bird:liftoff', this)
 
       @speed.add_(new Vector(0.0, -@accelrtn))
       @rotate(-0.5)
 
-    if (not @keepFalling)
+    if (@keepFalling)
       @speed.add_(new Vector(0.0, @gravity))
       @rotate(0.04)
 

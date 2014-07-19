@@ -5,7 +5,7 @@
 class ForegroundSprite
 
   constructor: (@eventManager, @keyboard) ->
-    @debug    = true
+    @debug    = false
     @type     = 'foreground'
     @size     = new Vector(576, 112)
     @mode     = 'default'

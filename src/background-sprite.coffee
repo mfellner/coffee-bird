@@ -5,7 +5,7 @@
 class BackgroundSprite
 
   constructor: (@eventManager, @keyboard) ->
-    @debug    = true
+    @debug    = false
     @type     = 'background'
     @size     = new Vector(576, 512)
     @mode     = 'day'
