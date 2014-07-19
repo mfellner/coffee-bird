@@ -14,8 +14,14 @@ class Game extends Game
     @eventManager = new EventManager
     @sceneManager.setScene "BackgroundScene", this
 
+    @gameOver = false
+    @gameOverKeyUp = 0
+
     @eventManager.register('game:over', (sender) =>
-      @sceneManager.setScene "GameOverScene", this)
+      @gameOver = true
+      @eventManager.trigger('game:reset')
+      @sceneManager.setScene "GameOverScene", this
+    )
 
     # HACK TODO: refactor, move into own module
     onTouchStart = () =>
@@ -33,6 +39,14 @@ class Game extends Game
   update: (delta) ->
     super(delta)
     @fps = (1000 / delta).toFixed(1)
+
+    if @gameOver && @keyboard.key('up')
+      @gameOverKeyUp += 1
+      if @gameOverKeyUp >= 30
+        @gameOverKeyUp = 0
+        @gameOver = false
+        @sceneManager.setScene "BackgroundScene", this
+
     @sceneManager.currentScene.update delta
 
   render: ->

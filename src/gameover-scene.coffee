@@ -19,5 +19,6 @@ class GameOverScene extends Scene
   render: (ctx) ->
     @sprites.background.render(ctx)
     @sprites.foreground.render(ctx)
+    ctx.fillText('GAME OVER', 90, 100)
 
 module.exports = GameOverScene

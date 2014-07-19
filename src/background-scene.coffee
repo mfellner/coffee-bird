@@ -14,24 +14,26 @@ class BackgroundScene extends Scene
       foreground: new ForegroundSprite(@parent.eventManager, @parent.keyboard)
       bird:       new BirdSprite(@parent.eventManager, @parent.keyboard)
 
-    # @spriteArray = (s for n, s of @sprites)
-    @pillarArray = []
-
-    # init pillars
-    @addRandomPillar(i) for i in [0..2]
-
     @parent.eventManager.register('pillar:kill', (pillar) =>
       @pillarArray.splice(@pillarArray.indexOf(pillar), 1)
       @addRandomPillar()
     )
 
-   randInt: (min, max) ->
+    @init()
+    @parent.eventManager.register('game:reset', () => @init())
+
+  init: () ->
+    @pillarArray = []
+    @addRandomPillar(i) for i in [0..2]
+    @parent.eventManager.trigger('bird:hitground', this)
+
+  randInt: (min, max) ->
     return Math.floor Math.random() * (max - min) + min
 
   addRandomPillar: (i=0) ->
     location = if @randInt(0, 2) then 'top' else 'btm'
-    y = if location is 'top' then @randInt(-100, 50) else @randInt(300, 500)
-    x = (288 + (54 // 2)) + @randInt(54*i, 54*i*3)
+    y = if location is 'top' then @randInt(-100, 50) else @randInt(350, 500)
+    x = (288 + (54 // 2)) + @randInt(54*i*1.5, 54*i*3)
     coords = new Vector(x, y)
 
     pillar = new PillarSprite(@parent.eventManager,
