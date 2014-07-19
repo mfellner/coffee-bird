@@ -14,6 +14,7 @@ class Game extends Game
     @eventManager = new EventManager
     @sceneManager.setScene "BackgroundScene", this
 
+    @points = 0
     @gameOver = false
     @gameOverKeyUp = 0
 
@@ -22,6 +23,8 @@ class Game extends Game
       @eventManager.trigger('game:reset')
       @sceneManager.setScene "GameOverScene", this
     )
+
+    @eventManager.register('pillar:score', (pillar) => @points += 1)
 
     # HACK TODO: refactor, move into own module
     onTouchStart = () =>
@@ -36,6 +39,10 @@ class Game extends Game
     cvs.addEventListener('touchcancel', onTouchStop, false)
     cvs.addEventListener('touchleave', onTouchStop, false)
 
+  start: () ->
+    super()
+    @eventManager.trigger('bird:liftoff', this)
+
   update: (delta) ->
     super(delta)
     @fps = (1000 / delta).toFixed(1)
@@ -45,6 +52,7 @@ class Game extends Game
       if @gameOverKeyUp >= 30
         @gameOverKeyUp = 0
         @gameOver = false
+        @points = 0
         @sceneManager.setScene "BackgroundScene", this
 
     @sceneManager.currentScene.update delta
@@ -52,6 +60,7 @@ class Game extends Game
   render: ->
     super()
     @sceneManager.currentScene.render @ctx
-    @ctx.fillText(@fps, @params.width - 50, 20)
+    if not @gameOver then @ctx.fillText('Points: ' + @points, 4, 20)
+    # @ctx.fillText(@fps, @params.width - 50, 20)
 
 module.exports = Game

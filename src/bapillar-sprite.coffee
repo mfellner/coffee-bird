@@ -29,6 +29,10 @@ class PillarSprite
       @eventManager.trigger('bird:hitpillar', this)
 
   update: (delta) ->
+    if @coords.x <= 100 and not @scored
+      @scored = true
+      @eventManager.trigger('pillar:score', this)
+
     if @coords.x <= -@size.x // 2
       @eventManager.trigger('pillar:kill', this)
 
