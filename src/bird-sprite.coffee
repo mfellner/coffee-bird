@@ -5,7 +5,8 @@
 class BirdSprite
 
   constructor: (@eventManager, @keyboard) ->
-    @debug = false
+    @debug = true
+    @type  = 'bird'
     @size  = new Vector(34, 26)
     @mode  = 'red'
 
@@ -45,9 +46,14 @@ class BirdSprite
     @speed     = new Vector(0.0, 0.0)
     @hitbox    = new BoundingBox(@coords, @size)
 
-  setBlocked: (blocked) ->
-    @isBlocked = blocked
-    if @isBlocked then @speed.set(0, 0)
+  onHit: (hitbox, type) ->
+    @speed.set(0, 0)
+    if type == 'foreground'
+      @keepFalling = false
+      @coords.y = hitbox.topsideY() - @size.y // 2
+      @eventManager.trigger('bird:hitground', this)
+    else if type == 'background'
+      @coords.y = hitbox.downsideY() + @size.y // 2
 
   # HACK TODO: refactor
   rotate: (delta) ->
@@ -59,10 +65,14 @@ class BirdSprite
 
   update: (delta) ->
     if (@keyboard.key('up') && (@speed.y >= -@maxSpeed))
+      if not @keepFalling
+        @keepFalling = false
+        @eventManager.trigger('bird:liftoff', this)
+
       @speed.add_(new Vector(0.0, -@accelrtn))
       @rotate(-0.5)
 
-    if (not @isBlocked)
+    if (not @keepFalling)
       @speed.add_(new Vector(0.0, @gravity))
       @rotate(0.04)
 

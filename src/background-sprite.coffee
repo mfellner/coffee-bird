@@ -5,9 +5,11 @@
 class BackgroundSprite
 
   constructor: (@eventManager, @keyboard) ->
-    @debug = false
-    @size  = new Vector(576, 512)
-    @mode  = 'day'
+    @debug    = true
+    @type     = 'background'
+    @size     = new Vector(576, 512)
+    @mode     = 'day'
+    @isMoving = true
 
     @sprite = new Sprite
       'texture': 'img/background.png'
@@ -19,11 +21,18 @@ class BackgroundSprite
 
     @coords = @size.div 2
     @speed  = new Vector(-0.005, 0.0)
-    @hitbox = new BoundingBox(@coords, @size)
+    @hitbox = new BoundingBox(new Vector(@size.x // 2, -16),
+                              new Vector(@size.x, 4))
+
+    @eventManager.register('bird:hitground', (bird) => @isMoving = false)
+    @eventManager.register('bird:liftoff',   (bird) => @isMoving = true)
+
+  onHit: (hitbox) ->
+    # noop
 
   update: (delta) ->
     if @coords.x <= 0 then @coords.x = @size.x // 2
-    @coords.add_(@speed.mult delta)
+    if @isMoving then @coords.add_(@speed.mult delta)
 
   render: (ctx) ->
     ctx.save()
