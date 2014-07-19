@@ -14,6 +14,9 @@ class Game extends Game
     @eventManager = new EventManager
     @sceneManager.setScene "BackgroundScene", this
 
+    @eventManager.register('game:over', (sender) =>
+      @sceneManager.setScene "GameOverScene", this)
+
     # HACK TODO: refactor, move into own module
     onTouchStart = () =>
       @keyboard.keyarray['up'] = true

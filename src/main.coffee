@@ -4,6 +4,7 @@ Game   = require './game'
 jQuery = require '../node_modules/jquery/dist/jquery.js'
 
 Game.addScene require './background-scene'
+Game.addScene require './gameover-scene'
 
 jQuery ->
   game = new Game

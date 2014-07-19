@@ -61,8 +61,10 @@ class BirdSprite
       when 'background'
         @coords.y = hitbox.downsideY() + @size.y // 2
       else
-        @keepFalling = false
-        @eventManager.trigger('bird:hitground', this)
+        if type.indexOf('pillar') is 0
+          @keepFalling = false
+          @eventManager.trigger('bird:hitground', this)
+          @eventManager.trigger('game:over', this)
 
   # HACK TODO: refactor
   rotate: (delta) ->
