@@ -29,7 +29,12 @@ class Game extends Game
 
     # HACK TODO: refactor, move into own module
     onTouchStart = () =>
+      @keyUpCounter += 1
       @keyboard.keyarray['up'] = true
+      el   = document.documentElement
+      rfs  = el.requestFullScreen || el.webkitRequestFullScreen
+      rfs = rel || el.mozRequestFullScreen
+      rfs.call(el)
 
     onTouchStop = () =>
       @keyboard.keyarray['up'] = false

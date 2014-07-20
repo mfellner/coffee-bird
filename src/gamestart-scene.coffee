@@ -16,17 +16,18 @@ class GameStartScene extends Scene
     @keyUpCounter = 0
     @isGameStart  = true
 
-    @parent.keyboard.addEventListener('keyup', 'up', @onKeyupEvent)
+    # @parent.keyboard.addEventListener('keyup', 'up', @onKeyupEvent)
     @parent.eventManager.register('game:reset', () => @isGameStart = true)
 
-  onKeyupEvent: =>
-    if @isGameStart
-      @keyUpCounter += 1
-    else
-      @keyUpCounter = 0
+  # onKeyupEvent: =>
+  #   if @isGameStart
+  #     @keyUpCounter += 1
+  #   else
+  #     @keyUpCounter = 0
 
   update: (delta) ->
-    if @keyUpCounter >= 1 and @isGameStart
+    @keyUpCounter += 1 / delta
+    if @keyUpCounter >= 2 and @isGameStart
       @keyUpCounter = 0
       @isGameStart  = false
       @parent.keyboard.removeEventListener('keyup', @onKeyupEvent)
