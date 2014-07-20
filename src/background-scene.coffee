@@ -24,17 +24,24 @@ class BackgroundScene extends Scene
 
   init: () ->
     @pillarArray = []
-    @addRandomPillar(i) for i in [0..2]
-    @parent.eventManager.trigger('bird:hitground', this)
+    @lastAddedLocation = {x:0, y:0}
+    @addRandomPillar() for i in [0..4]
 
   randInt: (min, max) ->
     return Math.floor Math.random() * (max - min) + min
 
-  addRandomPillar: (i=0) ->
-    location = if @randInt(0, 2) then 'top' else 'btm'
-    y = if location is 'top' then @randInt(-100, 50) else @randInt(350, 500)
-    x = (288 + (54 // 2)) + @randInt(54*i*1.5, 54*i*3)
+  addRandomPillar: ->
+    location = if @randInt(0, 2) is 0 then 'top' else 'btm'
+    y = if location is 'top' then @randInt(-130, -25) else @randInt(345, 530)
+    offsetX = 54//2
+    minX    = if @lastAddedCoords then @lastAddedCoords.x + offsetX else 0
+    minX    = if location is not @lastAddedLocation then 0 else minX
+    x       = offsetX + @randInt(minX, minX + offsetX)
+    x       = if x < 288 + offsetX then 288 + offsetX else x
+
     coords = new Vector(x, y)
+    @lastAddedCoords   = coords
+    @lastAddedLocation = location
 
     pillar = new PillarSprite(@parent.eventManager,
                               @parent.keyboard,

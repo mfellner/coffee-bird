@@ -24,8 +24,9 @@ class BackgroundSprite
     @hitbox = new BoundingBox(new Vector(@size.x // 2, -16),
                               new Vector(@size.x, 4))
 
-    @eventManager.register('bird:hitground', (bird) => @isMoving = false)
-    @eventManager.register('bird:liftoff',   (bird) => @isMoving = true)
+    @eventManager.register('game:reset',     (sender) => @isMoving = false)
+    @eventManager.register('bird:hitground', (sender) => @isMoving = false)
+    @eventManager.register('bird:liftoff',   (sender) => @isMoving = true)
 
   onHit: (hitbox) ->
     # noop

@@ -38,33 +38,44 @@ class BirdSprite
       'fps'   : 8
       'frames': [6, 7, 8]
 
+    @gameOver    = false
+
     @maxSpeed    = 0.40
     @gravity     = 0.04
     @accelrtn    = 0.20
     @rotation    = 0.00
-    @keepFalling = true
+    @keepFalling = false
     @coords      = new Vector(100, 200)
     @speed       = new Vector(0.0, 0.0)
-    @hitbox      = new BoundingBox(@coords, @size)
+    @hitbox      = new BoundingBox(@coords,
+                                   new Vector(@size.x // 1.3, @size.y // 1.3))
 
     @eventManager.register('bird:hitpillar', (pillar) =>
       @onHit(pillar.hitbox, 'pillar:' + pillar.mode))
 
+    @eventManager.register('game:reset', () =>
+      @coords.set(100, 200)
+      @gameOver    = false
+      @keepFalling = false)
+
   onHit: (hitbox, type) ->
-    @speed.set(0, 0)
+    if not @gameOver then @speed.set(0, 0)
 
     switch type
       when 'foreground'
         @keepFalling = false
         @coords.y = hitbox.topsideY() - @size.y // 2
         @eventManager.trigger('bird:hitground', this)
+
+        if @gameOver
+          @eventManager.trigger('game:over', this)
+
       when 'background'
         @coords.y = hitbox.downsideY() + @size.y // 2
       else
+        @keepFalling = true
         if type.indexOf('pillar') is 0
-          @keepFalling = false
-          @eventManager.trigger('bird:hitground', this)
-          @eventManager.trigger('game:over', this)
+          @gameOver = true
 
   # HACK TODO: refactor
   rotate: (delta) ->
@@ -75,7 +86,7 @@ class BirdSprite
       @rotation = -0.6
 
   update: (delta) ->
-    if (@keyboard.key('up') && (@speed.y >= -@maxSpeed))
+    if @keyboard.key('up') and (@speed.y >= -@maxSpeed) and not @gameOver
       if not @keepFalling
         @keepFalling = true
         @eventManager.trigger('bird:liftoff', this)
@@ -83,7 +94,7 @@ class BirdSprite
       @speed.add_(new Vector(0.0, -@accelrtn))
       @rotate(-0.5)
 
-    if (@keepFalling)
+    if @keepFalling
       @speed.add_(new Vector(0.0, @gravity))
       @rotate(0.04)
 

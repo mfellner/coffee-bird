@@ -22,8 +22,9 @@ class ForegroundSprite
     @speed  = new Vector(-0.1, 0.0)
     @hitbox = new BoundingBox(@coords, @size)
 
-    @eventManager.register('bird:hitground', (bird) => @isMoving = false)
-    @eventManager.register('bird:liftoff',   (bird) => @isMoving = true)
+    @eventManager.register('game:reset',     (sender) => @isMoving = false)
+    @eventManager.register('bird:hitground', (sender) => @isMoving = false)
+    @eventManager.register('bird:liftoff',   (sender) => @isMoving = true)
 
   onHit: (hitbox) ->
     # noop

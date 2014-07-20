@@ -1,10 +1,8 @@
 # Intro Scene
 
-{ Scene, Vector } = require '../lib/instant-rocket-fuel/src/irf'
+{ Scene } = require '../lib/instant-rocket-fuel/src/irf'
 BackgroundSprite       = require './background-sprite'
 ForegroundSprite       = require './foreground-sprite'
-BirdSprite             = require './bird-sprite'
-PillarSprite           = require './bapillar-sprite'
 
 class GameOverScene extends Scene
 
